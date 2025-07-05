@@ -1,10 +1,12 @@
 name: Deploy Quartz
 
+# Trigger on pushes to your main publishing branch
 on:
   push:
     branches:
-      - v4    # or your branch name
+      - v4    # ← change this if your branch name is different
 
+# Grant only the permissions we need
 permissions:
   contents: read
   pages: write
@@ -14,21 +16,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      # 1. Check out your code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2. Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3. Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
+      # 4. Build the static site
       - name: Build site
         run: npm run build
 
-      - name: Upload to Pages
+      # 5. Upload the built files for Pages
+      - name: Upload to GitHub Pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
@@ -38,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
+      # This outputs the final URL once deployed
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
