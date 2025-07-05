@@ -24,7 +24,7 @@ jobs:
           node-version: 18
       - run: npm install
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v2  # ✅ use v2 here!
         with:
           path: ./dist
 
@@ -37,4 +37,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4  # ✅ this one does have a v4
